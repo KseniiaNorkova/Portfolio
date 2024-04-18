@@ -1,0 +1,37 @@
+import random
+import time
+
+# For auto-game mod
+# choices = ['Камень', 'Ножницы', 'Бумага'] 
+# result = random.choice(choices)
+# print(result)
+
+
+def game(choice):
+    words = ('Камень', 'Ножницы', 'Бумага')
+    if choice in words:
+       choice_bot = random.choice(words)
+       print('Мой выбор:')
+       time.sleep(2)
+       print(choice_bot)
+       if choice == choice_bot:
+           time.sleep(1)
+           print('Ничья')
+       elif ((choice == 'Камень'
+             and choice_bot == 'Ножницы') 
+             or (choice == 'Ножницы' 
+             and choice_bot == 'Бумага') 
+             or (choice == 'Бумага' 
+             and choice_bot == 'Камень')):
+           time.sleep(1)
+           print('Победа за тобой!')
+       else:
+           time.sleep(1)
+           print('Я победил!')     
+    else:
+        print('Я тебя не понимаю')
+      
+game(input('Камень, ножницы или бумага?\n').capitalize())
+
+# for auto-game mod
+# game(result)
