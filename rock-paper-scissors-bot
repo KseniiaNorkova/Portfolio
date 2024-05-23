@@ -1,0 +1,70 @@
+import random
+import telebot
+from telebot import types
+
+# bot @knb_1516bot
+TOKEN = 'BOT_TOKEN'
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item1 = types.KeyboardButton('🎲 Начать игру')
+    markup.add(item1)
+    bot.send_message(message.chat.id, f'''👋🏻 Привет, {message.from_user.first_name}! 
+Нажми на кнопку "Начать игру", чтобы сыграть со мной.''', reply_markup=markup)
+
+@bot.message_handler(content_types=['text'])
+def message(message):
+    words = ('🗿 Камень', '✂️ Ножницы', '🗒 Бумага')
+    if message.chat.type == 'private':
+        choice_bot = random.choice(words)
+        if message.text == '🎲 Начать игру':
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('🗿 Камень')
+            item2 = types.KeyboardButton('✂️ Ножницы')
+            item3 = types.KeyboardButton('🗒 Бумага')
+            item4 = types.KeyboardButton('🛑 Я не хочу играть')
+            markup.add(item1, item2, item3, item4)
+            bot.send_message(message.chat.id, '❓ Камень, ножницы или бумага?', reply_markup=markup)            
+        elif message.text == choice_bot:
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('🔁 Сыграть ещё раз')
+            item2 = types.KeyboardButton('🛑 Я не хочу играть')
+            bot.send_message(message.chat.id, f"Мой выбор: {choice_bot}")         
+            bot.send_message(message.chat.id, f'👥 Ничья! Сыграем ещё раз?', reply_markup=markup)
+        elif ((message.text == '🗿 Камень' and choice_bot == '✂️ Ножницы') 
+            or (message.text == '✂️ Ножницы' and choice_bot == '🗒 Бумага') 
+            or (message.text == '🗒 Бумага' and choice_bot == '🗿 Камень')): 
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('🔁 Сыграть ещё раз')
+            item2 = types.KeyboardButton('🛑 Я не хочу играть')
+            bot.send_message(message.chat.id, f"Мой выбор: {choice_bot}")
+            bot.send_message(message.chat.id, f'🏆 Победа за тобой! Сыграем ещё раз?', reply_markup=markup)
+        elif ((message.text == '✂️ Ножницы' and choice_bot == '🗿 Камень') 
+            or (message.text == '🗒 Бумага' and choice_bot == '✂️ Ножницы') 
+            or (message.text == '🗿 Камень' and choice_bot == '🗒 Бумага')):
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('🔁 Сыграть ещё раз')
+            item2 = types.KeyboardButton('🛑 Я не хочу играть')
+            bot.send_message(message.chat.id, f"Мой выбор: {choice_bot}")
+            bot.send_message(message.chat.id, f'👻 Я победил! Сыграем ещё раз?', reply_markup=markup)      
+        elif message.text == '🛑 Я не хочу играть':
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('🎲 Начать игру')
+            markup.add(item1)
+            bot.send_message(message.chat.id, '😼 Если снова захочешь поиграть, нажми на кнопку "Начать игру".', reply_markup=markup)
+        else:
+            bot.send_message(message.chat.id, '😿 Я тебя не понимаю, для начала нажми /start')
+
+bot.polling(none_stop=True)
+
+
+
+
+
+
+
+# lst = ['Камень', 'Ножницы', 'Бумага']
+# result = random.choice(lst)
+# print(result)
